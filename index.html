@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLC 그룹 부동산 투자 포털</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: "Corporate Luxury" (Deep Blue, Gold, Cool Gray, White) -->
+    <!-- Application Structure Plan: A single-page dashboard. Users select one of four main projects (Ha Long, Quy Nhon, etc.) via top navigation cards. This dynamically updates a central content area, which uses a tabbed interface to display detailed information and interactive charts (revenue, occupancy) for each asset (hotel, golf, etc.) within the selected project. This structure avoids page reloads and allows for easy comparison by keeping key navigation persistent, optimizing for an investor's goal of quickly assessing and comparing multiple high-value properties. -->
+    <!-- Visualization & Content Choices: Report data is presented to inform and allow comparison. Project financials (revenue, occupancy) are visualized using interactive Chart.js bar and doughnut charts for quick comprehension. Key metrics (price, area) are highlighted in large stat cards. Legal statuses are shown as scannable checklists with Unicode icons. Project assets are organized into tabs for clarity. This avoids information overload and guides the user through complex data. All visualizations use Canvas, adhering to the NO SVG/Mermaid rule. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Noto Sans KR', 'Inter', sans-serif; background-color: #f8f9fa; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .card-active {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #D4AF37;
+        }
+        .tab-active {
+            background-color: #1a365d;
+            color: #ffffff;
+            border-color: #D4AF37;
+        }
+        .content-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-8">
+            <div class="flex flex-col sm:flex-row justify-center items-center mb-2">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800" style="color: #1a365d;">FLC 그룹 부동산 매각 포털</h1>
+                <a href="PROPOSAL FLC TOTAL.pdf" download="PROPOSAL FLC TOTAL.pdf" class="ml-0 sm:ml-4 mt-4 sm:mt-0 px-4 py-2 bg-[#D4AF37] text-white rounded-lg shadow-md hover:bg-[#C2A032] transition-colors duration-300 flex items-center justify-center">
+                    <span class="mr-2">⬇️</span> 제안서 다운로드
+                </a>
+            </div>
+            <p class="text-lg text-gray-600 mt-2">SMBL 독점 중개: 베트남의 프리미엄 투자 기회</p>
+        </header>
+
+        <nav id="project-navigation" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        </nav>
+
+        <main id="project-details" class="bg-white p-6 rounded-2xl shadow-lg min-h-[60vh]">
+        </main>
+
+        <footer class="text-center mt-12 py-6 border-t">
+            <p class="font-bold text-lg" style="color: #1a365d;">SMBL COMPANY LIMITED</p>
+            <p class="text-sm text-gray-600">독점 협상 파트너</p>
+            <div class="mt-4 text-sm text-gray-500">
+                <p>CEO 윤상호: +84 90 886 8100 | <a href="mailto:elkyoon@naver.com" class="hover:text-[#D4AF37]">elkyoon@naver.com</a></p>
+                <p>Keangnam Landmark Tower 19F, Pham Hung, Nam Tu Liem, Ha Noi, Viet Nam</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        const projectData = {
+            haLong: {
+                name: "FLC HA LONG",
+                location: "Quang Ninh Province",
+                totalValue: 4800,
+                description: "하롱베이의 탁 트인 전망을 자랑하는 세계적 수준의 리조트 단지로, 5성급 호텔, 국제 컨벤션 센터, 18홀 골프 코스를 포함하여 최고의 비즈니스 및 레저 환경을 제공합니다.",
+                assets: {
+                    hotel: {
+                        name: "그랜드 호텔 & 컨벤션 센터",
+                        priceVND: 3300,
+                        priceUSD: 127.1,
+                        details: [
+                            { label: "객실 수", value: "649개" },
+                            { label: "규모", value: "21층, GFA 69,277㎡" },
+                            { label: "컨벤션 규모", value: "최대 1,500명 수용" }
+                        ],
+                        performance: {
+                            occupancy: 78,
+                            revenue: 300,
+                            revenueLabel: "연간 평균 매출 (십억 VND)",
+                        },
+                        legal: [
+                            { item: "1/500 상세 계획", status: "Completed" },
+                            { item: "투자 정책 승인", status: "Completed" },
+                            { item: "건설 허가", status: "Completed" },
+                            { item: "사용 승인", status: "Completed" },
+                        ]
+                    },
+                    golf: {
+                        name: "골프 링크 & 클럽하우스",
+                        priceVND: 1500,
+                        priceUSD: 57.8,
+                        details: [
+                            { label: "코스", value: "18홀 / 71파" },
+                            { label: "설계", value: "Schmidt-Curley" },
+                            { label: "연간 방문객", value: "약 65,000명" }
+                        ],
+                        performance: {
+                            capacity: 82,
+                            revenue: 125,
+                            revenueLabel: "연간 예상 매출 (십억 VND)",
+                        },
+                        legal: [
+                            { item: "1/500 상세 계획", status: "Completed" },
+                            { item: "투자 정책 승인", status: "Completed" },
+                            { item: "토지 임대 결정", status: "Completed" },
+                            { item: "사용 승인", status: "Completed" },
+                        ]
+                    }
+                }
+            },
+            quyNhon: {
+                name: "FLC QUY NHON",
+                location: "Binh Dinh Province",
+                totalValue: 10200,
+                description: "해안선을 따라 펼쳐진 광대한 도시 리조트로, 다양한 호텔과 리조트, 36홀의 아시아 최고 골프 코스, 동물원 등 다채로운 시설을 갖춘 복합 휴양지입니다.",
+                assets: {
+                    urbanResort: {
+                        name: "도심 리조트 단지",
+                        priceVND: 6700,
+                        priceUSD: 258.0,
+                        details: [
+                            { label: "그랜드 호텔", value: "1,043개 객실" },
+                            { label: "럭셔리 호텔", value: "325개 객실" },
+                            { label: "럭셔리 리조트", value: "56개 빌라" },
+                            { label: "컨벤션 센터", value: "최대 1,500명 수용" }
+                        ],
+                        performance: {
+                            revenue: 450,
+                            revenueLabel: "리조트 연간 총 매출 (추정, 십억 VND)",
+                            occupancy: 75,
+                        },
+                        legal: [
+                            { item: "토지사용권 증서 (Red Book)", status: "Completed" },
+                            { item: "1/500 상세 계획", status: "Completed" },
+                        ]
+                    },
+                    golf: {
+                        name: "골프 링크 & 아카데미",
+                        priceVND: 1200,
+                        priceUSD: 46.2,
+                        details: [
+                            { label: "코스", value: "36홀 (Ocean, Mountain)" },
+                            { label: "설계", value: "Nicklaus, Schmidt-Curley" },
+                            { label: "연간 방문객", value: "약 40,000명" }
+                        ],
+                        performance: {
+                            capacity: 72,
+                            revenue: 70,
+                            revenueLabel: "연간 평균 매출 (십억 VND)",
+                        },
+                        legal: [
+                            { item: "토지사용권 증서 (Red Book)", status: "Completed" },
+                            { item: "1/500 상세 계획", status: "Completed" },
+                        ]
+                    },
+                    others: {
+                        name: "기타 자산",
+                        priceVND: 4100,
+                        priceUSD: 157.9,
+                        details: [
+                            { label: "골프 아카데미 빌라", value: "매각가 1,000억 VND" },
+                            { label: "야생 동물 공원", value: "매각가 1,500억 VND" },
+                            { label: "식수 공장", value: "매각가 800억 VND" }
+                        ],
+                        performance: null,
+                        legal: [
+                            { item: "골프 아카데미 빌라", status: "In Progress" },
+                            { item: "야생 동물 공원", status: "In Progress" },
+                            { item: "식수 공장", status: "In Progress" },
+                        ]
+                    }
+                }
+            },
+            samSon: {
+                name: "FLC SAM SON",
+                location: "Thanh Hoa Province",
+                totalValue: null,
+                description: "베트남 북부 해안의 대표적인 휴양지로, 호텔, 리조트, 골프 코스가 조화롭게 어우러져 가족 단위 휴양객과 골프 애호가 모두에게 사랑받는 곳입니다.",
+                assets: {
+                    resortComplex: {
+                        name: "호텔 & 리조트 단지",
+                        priceVND: null,
+                        priceUSD: null,
+                        details: [
+                            { label: "그랜드 호텔", value: "15층, 368개 객실" },
+                            { label: "럭셔리 호텔", value: "7층, 355개 객실" },
+                            { label: "럭셔리 리조트", value: "68개 빌라" }
+                        ],
+                        performance: {
+                            occupancy: 65,
+                            revenue: 320,
+                            revenueLabel: "연간 평균 매출 (십억 VND)",
+                        },
+                        legal: [
+                            { item: "토지사용권 증서 (Red Book)", status: "Completed" },
+                            { item: "1/500 상세 계획", status: "Completed" },
+                            { item: "투자 정책 승인", status: "Completed" },
+                        ]
+                    },
+                    golf: {
+                        name: "골프 링크 & 컨벤션",
+                        priceVND: null,
+                        priceUSD: null,
+                        details: [
+                            { label: "코스", value: "18홀 / 72파" },
+                            { label: "컨벤션 규모", value: "최대 1,200명 수용" },
+                            { label: "연간 방문객", value: "약 60,000명 (골프)" }
+                        ],
+                         performance: {
+                            capacity: 80,
+                            revenue: 195,
+                            revenueLabel: "연간 총 매출 (골프+컨벤션, 십억 VND)",
+                        },
+                        legal: [
+                            { item: "토지사용권 증서 (Red Book)", status: "Completed" },
+                            { item: "1/500 상세 계획", status: "Completed" },
+                            { item: "건설 허가", status: "Completed" },
+                        ]
+                    }
+                }
+            },
+            quangBinh: {
+                name: "FLC QUANG BINH",
+                location: "Quang Binh Province",
+                totalValue: null,
+                description: "동남아 최대 규모의 골프 코스 단지를 목표로 개발 중인 초대형 프로젝트입니다. 자연 그대로의 아름다움을 간직한 코스와 호텔이 주요 자산입니다.",
+                assets: {
+                    hotel: {
+                        name: "그랜드 호텔",
+                        priceVND: null,
+                        priceUSD: null,
+                        details: [
+                            { label: "규모", value: "12층, 561 유닛" },
+                            { label: "현재 상태", value: "골조 공사 완료" },
+                            { label: "기반 시설", value: "주변 완료" }
+                        ],
+                        performance: null,
+                        legal: [
+                            { item: "토지사용권 증서 (Red Book)", status: "Completed" },
+                            { item: "1/500 상세 계획", status: "Completed" },
+                            { item: "연간 토지 사용료 납부", status: "Completed" },
+                        ]
+                    },
+                    golf: {
+                        name: "골프 링크 & 클럽하우스",
+                        priceVND: null,
+                        priceUSD: null,
+                        details: [
+                            { label: "코스", value: "54홀 (36홀 운영 중)" },
+                            { label: "설계", value: "Schmidt-Curley" },
+                            { label: "연간 방문객", value: "약 18,000명" }
+                        ],
+                         performance: {
+                            capacity: 0,
+                            revenue: 21,
+                            revenueLabel: "연간 평균 매출 (십억 VND)",
+                        },
+                        legal: [
+                            { item: "1/500 상세 계획", status: "Completed" },
+                            { item: "투자 정책 승인", status: "Completed" },
+                            { item: "산림 사용 목적 변경", status: "In Progress" },
+                        ]
+                    }
+                }
+            }
+        };
+
+        let currentProjectKey = 'haLong';
+        let currentAssetKey = 'hotel';
+        let chartInstances = {};
+
+        const navigationContainer = document.getElementById('project-navigation');
+        const detailsContainer = document.getElementById('project-details');
+
+        function formatCurrency(value, currency = 'VND') {
+            if (value === null || value === undefined) return "가격 문의";
+            if (currency === 'VND') {
+                return `${value.toLocaleString('en-US')} 억 VND`;
+            }
+            return `$${value.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} M`;
+        }
+
+        function renderNavigation() {
+            navigationContainer.innerHTML = Object.keys(projectData).map(key => {
+                const project = projectData[key];
+                const isActive = key === currentProjectKey;
+                const totalValueDisplay = project.totalValue ? `${project.totalValue.toLocaleString('en-US')} 억+` : '가격 문의';
+                return `
+                    <div id="nav-${key}" data-key="${key}" class="nav-card cursor-pointer p-4 rounded-xl border-2 transition-all duration-300 ease-in-out ${isActive ? 'card-active bg-white' : 'bg-white border-transparent hover:bg-gray-100'} shadow-md">
+                        <h3 class="text-xl font-bold" style="color: #1a365d;">${project.name}</h3>
+                        <p class="text-sm text-gray-500 mb-2">${project.location}</p>
+                        <p class="font-inter text-lg font-semibold text-[#D4AF37]">${totalValueDisplay}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderProjectDetails() {
+            const project = projectData[currentProjectKey];
+            currentAssetKey = Object.keys(project.assets)[0]; 
+
+            const tabs = Object.keys(project.assets).map(assetKey => {
+                const asset = project.assets[assetKey];
+                const isActive = assetKey === currentAssetKey;
+                return `<button data-asset-key="${assetKey}" class="asset-tab px-4 py-2 text-sm font-semibold rounded-lg border-2 border-transparent transition-colors duration-200 ${isActive ? 'tab-active' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}">${asset.name}</button>`;
+            }).join('');
+
+            detailsContainer.innerHTML = `
+                <div class="content-fade-in">
+                    <h2 class="text-3xl font-bold mb-2" style="color: #1a365d;">${project.name}</h2>
+                    <p class="text-gray-600 mb-6">${project.description}</p>
+                    <div class="flex flex-wrap gap-2 mb-6">${tabs}</div>
+                    <div id="asset-content"></div>
+                </div>
+            `;
+            renderAssetDetails();
+        }
+
+        function renderAssetDetails() {
+            const asset = projectData[currentProjectKey].assets[currentAssetKey];
+            const assetContentContainer = document.getElementById('asset-content');
+            if (!assetContentContainer) return;
+
+            const detailsHTML = asset.details.map(detail => `
+                <div class="bg-blue-50 p-3 rounded-lg text-center">
+                    <p class="text-sm text-blue-800 font-semibold">${detail.label}</p>
+                    <p class="text-lg font-bold text-blue-900">${detail.value}</p>
+                </div>
+            `).join('');
+
+            const legalHTML = asset.legal.map(item => `
+                <li class="flex items-center">
+                    <span class="mr-2 text-lg ${item.status === 'Completed' ? 'text-green-500' : 'text-yellow-500'}">
+                        ${item.status === 'Completed' ? '✓' : '⏳'}
+                    </span>
+                    <span>${item.item} - <span class="font-semibold">${item.status}</span></span>
+                </li>
+            `).join('');
+
+            const performanceHTML = asset.performance ? `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="occupancyChart"></canvas>
+                    </div>
+                </div>
+            ` : `<div class="text-center py-10 bg-gray-100 rounded-lg"><p class="text-gray-500">세부 사업 실적 데이터가 제공되지 않았습니다.</p></div>`;
+
+            assetContentContainer.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-3">
+                        <h3 class="text-2xl font-bold mb-4">${asset.name}</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">${detailsHTML}</div>
+                        <h4 class="text-xl font-semibold mb-3">사업 실적</h4>
+                        ${performanceHTML}
+                    </div>
+                    <div class="lg:col-span-2 bg-gray-50 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3">예상 매각 가격</h4>
+                        <div class="bg-white p-4 rounded-lg shadow-inner mb-6">
+                            <p class="text-3xl font-bold font-inter text-[#D4AF37]">${formatCurrency(asset.priceVND, 'VND')}</p>
+                            <p class="text-md font-inter text-gray-500">${formatCurrency(asset.priceUSD, 'USD')}</p>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-3">법적 지위</h4>
+                        <ul class="space-y-2 text-gray-700">${legalHTML}</ul>
+                    </div>
+                </div>
+            `;
+            
+            if (asset.performance) {
+                createCharts(asset.performance);
+            }
+        }
+
+        function createCharts(performance) {
+            Object.values(chartInstances).forEach(chart => chart.destroy());
+
+            const revenueCtx = document.getElementById('revenueChart')?.getContext('2d');
+            if (revenueCtx) {
+                chartInstances.revenue = new Chart(revenueCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [performance.revenueLabel],
+                        datasets: [{
+                            label: '매출',
+                            data: [performance.revenue],
+                            backgroundColor: 'rgba(26, 54, 93, 0.8)',
+                            borderColor: 'rgba(26, 54, 93, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, title: { display: true, text: '매출 현황' } },
+                        scales: { y: { beginAtZero: true, ticks: { callback: value => `${value}억` } } }
+                    }
+                });
+            }
+
+            const occupancyCtx = document.getElementById('occupancyChart')?.getContext('2d');
+            if (occupancyCtx) {
+                const rate = performance.occupancy || performance.capacity;
+                const label = performance.occupancy ? '객실 점유율' : '가동률';
+                if(rate > 0) {
+                    chartInstances.occupancy = new Chart(occupancyCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: [label, '잔여'],
+                            datasets: [{
+                                data: [rate, 100 - rate],
+                                backgroundColor: ['rgba(212, 175, 55, 0.8)', 'rgba(230, 230, 230, 0.8)'],
+                                borderColor: ['rgba(212, 175, 55, 1)', 'rgba(200, 200, 200, 1)'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom' },
+                                title: { display: true, text: label },
+                                tooltip: { callbacks: { label: (context) => `${context.label}: ${context.raw}%` } }
+                            },
+                            cutout: '60%'
+                        }
+                    });
+                } else {
+                    occupancyCtx.font = "16px 'Noto Sans KR'";
+                    occupancyCtx.fillStyle = "#888";
+                    occupancyCtx.textAlign = "center";
+                    occupancyCtx.fillText("데이터 없음", occupancyCtx.canvas.width / 2, occupancyCtx.canvas.height / 2);
+                }
+            }
+        }
+        
+        function handleNavigation(e) {
+            const targetCard = e.target.closest('.nav-card');
+            if (!targetCard) return;
+
+            currentProjectKey = targetCard.dataset.key;
+            
+            document.querySelectorAll('.nav-card').forEach(card => {
+                card.classList.remove('card-active');
+            });
+            targetCard.classList.add('card-active');
+
+            renderProjectDetails();
+            addAssetTabListeners();
+        }
+
+        function handleAssetTab(e) {
+            const targetTab = e.target.closest('.asset-tab');
+            if (!targetTab) return;
+
+            currentAssetKey = targetTab.dataset.assetKey;
+            document.querySelectorAll('.asset-tab').forEach(tab => {
+                tab.classList.remove('tab-active');
+                tab.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+            });
+            targetTab.classList.add('tab-active');
+            targetTab.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+            
+            renderAssetDetails();
+        }
+        
+        function addAssetTabListeners() {
+            document.querySelectorAll('.asset-tab').forEach(tab => {
+                tab.addEventListener('click', handleAssetTab);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderNavigation();
+            renderProjectDetails();
+            navigationContainer.addEventListener('click', handleNavigation);
+            detailsContainer.addEventListener('click', e => {
+                if (e.target.classList.contains('asset-tab')) {
+                    handleAssetTab(e);
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
