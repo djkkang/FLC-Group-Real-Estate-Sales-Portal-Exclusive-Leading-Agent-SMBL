@@ -8,11 +8,21 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: "Corporate Luxury" (Deep Blue, Gold, Cool Gray, White) -->
-    <!-- Application Structure Plan: A single-page dashboard. Users select one of four main projects (Ha Long, Quy Nhon, etc.) via top navigation cards. This dynamically updates a central content area, which uses a tabbed interface to display detailed information and interactive charts (revenue, occupancy) for each asset (hotel, golf, etc.) within the selected project. This structure avoids page reloads and allows for easy comparison by keeping key navigation persistent, optimizing for an investor's goal of quickly assessing and comparing multiple high-value properties. -->
+    <!-- Application Structure Plan: A single-page dashboard. Users select one of four main projects (Ha Long, Quy Nhon, etc.) via top navigation cards. This dynamically updates a central content area, which uses a tabbed interface to display detailed information and interactive charts (revenue, occupancy) for each asset (hotel, golf, etc.) within the selected project. This structure avoids page reloads and allows for easy comparison by keeping key navigation persistent, optimizing for an investor's goal of quickly assessing and multiple high-value properties. -->
     <!-- Visualization & Content Choices: Report data is presented to inform and allow comparison. Project financials (revenue, occupancy) are visualized using interactive Chart.js bar and doughnut charts for quick comprehension. Key metrics (price, area) are highlighted in large stat cards. Legal statuses are shown as scannable checklists with Unicode icons. Project assets are organized into tabs for clarity. This avoids information overload and guides the user through complex data. All visualizations use Canvas, adhering to the NO SVG/Mermaid rule. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
-        body { font-family: 'Noto Sans KR', 'Inter', sans-serif; background-color: #f8f9fa; }
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: #f8f9fa; /* 배경 이미지 로딩 전 또는 없을 때의 대체 색상 */
+            /* 여기에 고객님께서 업로드하여 확보하신 배경 이미지의 URL을 넣어주세요. */
+            /* 예시: background-image: url('https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/your-uploaded-image.jpg'); */
+            background-image: url('https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/9ea485a6ecfa4fb6ab5245f3c853bc7csg0ZIPqO5Obtu33i-0.png'); /* 이 부분을 고객님의 이미지 URL로 교체! */
+            background-size: cover; /* 배경 이미지를 요소에 맞게 확대/축소 */
+            background-position: center; /* 배경 이미지를 중앙에 배치 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 없음 */
+            background-attachment: fixed; /* 배경 이미지를 스크롤에 고정 (시차 효과) */
+        }
         .font-inter { font-family: 'Inter', sans-serif; }
         .card-active {
             transform: translateY(-5px) scale(1.03);
@@ -234,8 +244,8 @@
                             revenueLabel: "연간 총 매출 (골프+컨벤션, 십억 VND)",
                         },
                         legal: [
-                            { item: "토지사용권 증서 (Red Book)", status: "Completed" },
                             { item: "1/500 상세 계획", status: "Completed" },
+                            { item: "투자 정책 승인", status: "Completed" },
                             { item: "건설 허가", status: "Completed" },
                         ]
                     }
