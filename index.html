@@ -14,13 +14,30 @@
         body {
             font-family: 'Noto Sans KR', 'Inter', sans-serif;
             background-color: #f8f9fa; /* 배경 이미지 로딩 전 또는 없을 때의 대체 색상 */
-            background-image: url('https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/2025-07-14%2011%3B12%3B20.PNG'); /* 새로운 배경 이미지 URL 적용 */
+            background-image: url('https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/2025-07-14%2011%3B12%3B20.PNG'); /* 전체 페이지 배경 이미지 */
             background-size: cover; /* 배경 이미지를 요소에 맞게 확대/축소 */
             background-position: center; /* 배경 이미지를 중앙에 배치 */
             background-repeat: no-repeat; /* 배경 이미지 반복 없음 */
             background-attachment: fixed; /* 배경 이미지를 스크롤에 고정 (시차 효과) */
         }
         .font-inter { font-family: 'Inter', sans-serif; }
+        .nav-card {
+            background-size: cover;
+            background-position: center;
+            color: white; /* 텍스트 색상을 흰색으로 변경하여 배경 이미지 위에서 잘 보이도록 */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6); /* 텍스트 그림자 추가 */
+            min-height: 150px; /* 카드 최소 높이 설정 */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* 내용을 카드 하단에 배치 */
+            padding: 1.5rem; /* 패딩 추가 */
+        }
+        /* 각 프로젝트 카드에 대한 배경 이미지 스타일 */
+        #nav-haLong { background-image: url('https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/9ea485a6ecfa4fb6ab5245f3c853bc7csg0ZIPqO5Obtu33i-9.png'); }
+        #nav-quyNhon { background-image: url('https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/9ea485a6ecfa4fb6ab5245f3c853bc7csg0ZIPqO5Obtu33i-25.png'); }
+        #nav-samSon { background-image: url('https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/9ea485a6ecfa4fb6ab5245f3c853bc7csg0ZIPqO5Obtu33i-48.png'); }
+        #nav-quangBinh { background-image: url('https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/9ea485a6ecfa4fb6ab5245f3c853bc7csg0ZIPqO5Obtu33i-70.png'); }
+
         .card-active {
             transform: translateY(-5px) scale(1.03);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
