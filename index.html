@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLC 그룹 부동산 투자 포털</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: "Corporate Luxury" (Deep Blue, Gold, Cool Gray, White) -->
     <!-- Application Structure Plan: A single-page dashboard. Users select one of four main projects (Ha Long, Quy Nhon, etc.) via top navigation cards. This dynamically updates a central content area, which uses a tabbed interface to display detailed information and interactive charts (revenue, occupancy) for each asset (hotel, golf, etc.) within the selected project. This structure avoids page reloads and allows for easy comparison by keeping key navigation persistent, optimizing for an investor's goal of quickly assessing and multiple high-value properties. -->
@@ -86,6 +85,7 @@
 
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js 스크립트 위치 이동 -->
     <script>
         const projectData = {
             haLong: {
