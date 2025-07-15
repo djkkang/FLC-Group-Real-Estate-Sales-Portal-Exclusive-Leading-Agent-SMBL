@@ -69,38 +69,73 @@
                 height: 350px;
             }
         }
+        /* 초기에는 웹사이트 내용을 숨깁니다 */
+        #website-content {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <div class="container mx-auto p-4 md:p-8">
-        
-        <header class="text-center mb-8">
-            <div class="flex flex-col sm:flex-row justify-center items-center mb-2">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-800" style="color: #1a365d;">FLC 그룹 부동산 매각 포털</h1>
-                <a href="PROPOSAL FLC TOTAL.pdf" download="PROPOSAL FLC TOTAL.pdf" class="ml-0 sm:ml-4 mt-4 sm:mt-0 px-4 py-2 bg-[#D4AF37] text-white rounded-lg shadow-md hover:bg-[#C2A032] transition-colors duration-300 flex items-center justify-center">
-                    <span class="mr-2">⬇️</span> 제안서 다운로드
-                </a>
-            </div>
-            <p class="text-lg text-gray-600 mt-2">SMBL 독점 중개: 베트남의 프리미엄 투자 기회</p>
-        </header>
+    <!-- JavaScript 비밀번호 보호 스크립트 -->
+    <script>
+        // 여기에 설정할 비밀번호를 입력하세요. (보안에 매우 취약합니다. 개발자 도구로 쉽게 확인 가능)
+        const CORRECT_PASSWORD = "smbl2025flc"; // <-- 이 부분을 원하는 비밀번호로 변경하세요!
 
-        <nav id="project-navigation" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        </nav>
+        function promptForPassword() {
+            let password = '';
+            // alert() 대신 사용자 지정 메시지 박스를 사용해야 하지만,
+            // 간단한 구현을 위해 여기서는 prompt()를 사용합니다.
+            // 실제 배포에서는 사용자 지정 UI를 구현하는 것이 좋습니다.
+            while (password !== CORRECT_PASSWORD) {
+                password = prompt("이 웹사이트는 비밀번호로 보호됩니다. 비밀번호를 입력해주세요:");
+                if (password === null) { // 사용자가 취소를 눌렀을 경우
+                    window.location.href = "about:blank"; // 빈 페이지로 이동 또는 다른 처리
+                    return;
+                }
+                if (password !== CORRECT_PASSWORD) {
+                    alert("잘못된 비밀번호입니다. 다시 시도해주세요.");
+                }
+            }
+            // 비밀번호가 맞으면 웹사이트 내용을 표시합니다.
+            document.getElementById('website-content').style.display = 'block';
+        }
 
-        <main id="project-details" class="bg-white p-6 rounded-2xl shadow-lg min-h-[60vh]">
-        </main>
+        // 페이지 로드 시 비밀번호 프롬프트 실행
+        window.onload = promptForPassword;
+    </script>
 
-        <footer class="text-center mt-12 py-6 border-t">
-            <p class="font-bold text-lg" style="color: #1a365d;">SMBL COMPANY LIMITED</p>
-            <p class="text-sm text-gray-600">독점 협상 파트너</p>
-            <div class="mt-4 text-sm text-gray-500">
-                <p>CEO 윤상호: +84 90 886 8100 | <a href="mailto:elkyoon@naver.com" class="hover:text-[#D4AF37]">elkyoon@naver.com</a></p>
-                <p>Keangnam Landmark Tower 19F, Pham Hung, Nam Tu Liem, Ha Noi, Viet Nam</p>
-            </div>
-        </footer>
+    <!-- 웹사이트의 실제 내용 (비밀번호 입력 후 표시될 부분) -->
+    <div id="website-content">
+        <div class="container mx-auto p-4 md:p-8">
+            
+            <header class="text-center mb-8">
+                <div class="flex flex-col sm:flex-row justify-center items-center mb-2">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-800" style="color: #1a365d;">FLC 그룹 부동산 매각 포털</h1>
+                    <a href="PROPOSAL FLC TOTAL.pdf" download="PROPOSAL FLC TOTAL.pdf" class="ml-0 sm:ml-4 mt-4 sm:mt-0 px-4 py-2 bg-[#D4AF37] text-white rounded-lg shadow-md hover:bg-[#C2A032] transition-colors duration-300 flex items-center justify-center">
+                        <span class="mr-2">⬇️</span> 제안서 다운로드
+                    </a>
+                </div>
+                <p class="text-lg text-gray-600 mt-2">SMBL 독점 중개: 베트남의 프리미엄 투자 기회</p>
+            </header>
 
-    </div>
+            <nav id="project-navigation" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            </nav>
+
+            <main id="project-details" class="bg-white p-6 rounded-2xl shadow-lg min-h-[60vh]">
+            </main>
+
+            <footer class="text-center mt-12 py-6 border-t">
+                <p class="font-bold text-lg" style="color: #1a365d;">SMBL COMPANY LIMITED</p>
+                <p class="text-sm text-gray-600">독점 협상 파트너</p>
+                <div class="mt-4 text-sm text-gray-500">
+                    <p>CEO 윤상호: +84 90 886 8100 | <a href="mailto:elkyoon@naver.com" class="hover:text-[#D4AF37]">elkyoon@naver.com</a></p>
+                    <p>Keangnam Landmark Tower 19F, Pham Hung, Nam Tu Liem, Ha Noi, Viet Nam</p>
+                </div>
+            </footer>
+
+        </div>
+    </div> <!-- #website-content 끝 -->
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js 스크립트 위치 이동 -->
     <script>
