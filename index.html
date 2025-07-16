@@ -76,22 +76,19 @@
             background-repeat: no-repeat;
             transition: background-image 0.5s ease-in-out; /* 배경 이미지 전환 효과 */
             position: relative; /* 오버레이를 위해 필요 */
+            padding: 0; /* 내부 콘텐츠 패딩은 자식 요소로 이동 */
+            border-radius: 1rem; /* 부모 요소와 동일한 둥근 모서리 */
+            overflow: hidden; /* 배경 이미지가 튀어나가지 않도록 */
         }
         /* 상세 페이지 콘텐츠 오버레이 (배경 이미지 위에서 내용이 잘 보이도록) */
-        #project-details::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        /* ::before 가상 요소를 제거하고, 콘텐츠를 감싸는 div에 배경을 적용합니다. */
+        #project-details .details-content-wrapper {
             background-color: rgba(255, 255, 255, 0.85); /* 반투명 흰색 오버레이 */
+            padding: 1.5rem; /* 기존 project-details의 패딩을 여기에 적용 */
+            min-height: 60vh; /* 기존 project-details의 최소 높이 유지 */
+            position: relative; /* z-index를 위해 필요 */
+            z-index: 1; /* 콘텐츠가 배경 이미지 위로 오도록 */
             border-radius: 1rem; /* 부모 요소와 동일한 둥근 모서리 */
-            z-index: 0; /* 콘텐츠 아래로 */
-        }
-        #project-details > div {
-            position: relative;
-            z-index: 1; /* 콘텐츠가 오버레이 위로 오도록 */
         }
     </style>
 </head>
@@ -142,7 +139,11 @@
             <nav id="project-navigation" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             </nav>
 
-            <main id="project-details" class="bg-white p-6 rounded-2xl shadow-lg min-h-[60vh]">
+            <main id="project-details" class="p-0 rounded-2xl shadow-lg min-h-[60vh]">
+                <!-- project-details 내부 콘텐츠를 감싸는 div 추가 -->
+                <div class="details-content-wrapper p-6">
+                    <!-- 기존 main 태그 내부의 내용이 여기에 렌더링됩니다. -->
+                </div>
             </main>
 
             <footer class="text-center mt-12 py-6 border-t">
@@ -418,8 +419,9 @@
                 return `<button data-asset-key="${assetKey}" class="asset-tab px-4 py-2 text-sm font-semibold rounded-lg border-2 border-transparent transition-colors duration-200 ${isActive ? 'tab-active' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}">${asset.name}</button>`;
             }).join('');
 
+            // 기존 project-details.innerHTML 대신 details-content-wrapper를 사용하도록 수정
             detailsContainer.innerHTML = `
-                <div class="content-fade-in">
+                <div class="details-content-wrapper content-fade-in">
                     <h2 class="text-3xl font-bold mb-2" style="color: #1a365d;">${project.name}</h2>
                     <p class="text-gray-600 mb-6">${project.description}</p>
                     <div class="flex flex-wrap gap-2 mb-6">${tabs}</div>
