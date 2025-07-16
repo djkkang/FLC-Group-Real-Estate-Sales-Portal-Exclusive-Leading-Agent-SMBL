@@ -14,11 +14,7 @@
         body {
             font-family: 'Noto Sans KR', 'Inter', sans-serif;
             background-color: #f8f9fa; /* 배경 이미지 로딩 전 또는 없을 때의 대체 색상 */
-            background-image: url('https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/2025-07-14%2011%3B12%3B20.PNG'); /* 전체 페이지 배경 이미지 */
-            background-size: cover; /* 배경 이미지를 요소에 맞게 확대/축소 */
-            background-position: center; /* 배경 이미지를 중앙에 배치 */
-            background-repeat: no-repeat; /* 배경 이미지 반복 없음 */
-            background-attachment: fixed; /* 배경 이미지를 스크롤에 고정 (시차 효과) */
+            /* 전체 페이지 배경 이미지는 제거하고 각 상세 페이지 배경을 동적으로 설정합니다. */
         }
         .font-inter { font-family: 'Inter', sans-serif; }
         .nav-card {
@@ -73,6 +69,30 @@
         #website-content {
             display: none;
         }
+        /* 상세 페이지 배경 스타일 */
+        #project-details {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: background-image 0.5s ease-in-out; /* 배경 이미지 전환 효과 */
+            position: relative; /* 오버레이를 위해 필요 */
+        }
+        /* 상세 페이지 콘텐츠 오버레이 (배경 이미지 위에서 내용이 잘 보이도록) */
+        #project-details::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.85); /* 반투명 흰색 오버레이 */
+            border-radius: 1rem; /* 부모 요소와 동일한 둥근 모서리 */
+            z-index: 0; /* 콘텐츠 아래로 */
+        }
+        #project-details > div {
+            position: relative;
+            z-index: 1; /* 콘텐츠가 오버레이 위로 오도록 */
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -80,7 +100,7 @@
     <!-- JavaScript 비밀번호 보호 스크립트 -->
     <script>
         // 여기에 설정할 비밀번호를 입력하세요. (보안에 매우 취약합니다. 개발자 도구로 쉽게 확인 가능)
-        const CORRECT_PASSWORD = "smbl2025flc"; // <-- 이 부분을 원하는 비밀번호로 변경하세요!
+        const CORRECT_PASSWORD = "your_secret_password"; // <-- 이 부분을 원하는 비밀번호로 변경하세요!
 
         function promptForPassword() {
             let password = '';
@@ -145,6 +165,7 @@
                 location: "Quang Ninh Province",
                 totalValue: 4800,
                 description: "하롱베이의 탁 트인 전망을 자랑하는 세계적 수준의 리조트 단지로, 5성급 호텔, 국제 컨벤션 센터, 18홀 골프 코스를 포함하여 최고의 비즈니스 및 레저 환경을 제공합니다.",
+                detailBgImage: "https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/1.%ED%95%98%EB%A1%B1%EC%83%81%EC%84%B8.PNG", // 상세 페이지 배경 이미지
                 assets: {
                     hotel: {
                         name: "그랜드 호텔 & 컨벤션 센터",
@@ -195,6 +216,7 @@
                 location: "Binh Dinh Province",
                 totalValue: 10200,
                 description: "해안선을 따라 펼쳐진 광대한 도시 리조트로, 다양한 호텔과 리조트, 36홀의 아시아 최고 골프 코스, 동물원 등 다채로운 시설을 갖춘 복합 휴양지입니다.",
+                detailBgImage: "https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/2.quynhon%EC%83%81%EC%84%B8.PNG", // 상세 페이지 배경 이미지
                 assets: {
                     urbanResort: {
                         name: "도심 리조트 단지",
@@ -258,6 +280,7 @@
                 location: "Thanh Hoa Province",
                 totalValue: null,
                 description: "베트남 북부 해안의 대표적인 휴양지로, 호텔, 리조트, 골프 코스가 조화롭게 어우러져 가족 단위 휴양객과 골프 애호가 모두에게 사랑받는 곳입니다.",
+                detailBgImage: "https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/3.%EC%82%BC%EC%86%90%EC%83%81%EC%84%B8.PNG", // 상세 페이지 배경 이미지
                 assets: {
                     resortComplex: {
                         name: "호텔 & 리조트 단지",
@@ -306,6 +329,7 @@
                 location: "Quang Binh Province",
                 totalValue: null,
                 description: "동남아 최대 규모의 골프 코스 단지를 목표로 개발 중인 초대형 프로젝트입니다. 자연 그대로의 아름다움을 간직한 코스와 호텔이 주요 자산입니다.",
+                detailBgImage: "https://raw.githubusercontent.com/smbl1/FLC-Sales_by_SMBL/main/4.quangbinh%EC%83%81%EC%84%B8.PNG", // 상세 페이지 배경 이미지
                 assets: {
                     hotel: {
                         name: "그랜드 호텔",
@@ -380,6 +404,13 @@
         function renderProjectDetails() {
             const project = projectData[currentProjectKey];
             currentAssetKey = Object.keys(project.assets)[0]; 
+
+            // 상세 페이지 배경 이미지 설정
+            if (project.detailBgImage) {
+                detailsContainer.style.backgroundImage = `url('${project.detailBgImage}')`;
+            } else {
+                detailsContainer.style.backgroundImage = 'none'; // 이미지가 없으면 배경 제거
+            }
 
             const tabs = Object.keys(project.assets).map(assetKey => {
                 const asset = project.assets[assetKey];
